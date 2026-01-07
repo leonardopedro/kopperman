@@ -1,0 +1,35 @@
+namespace protocol;
+
+// 1. AST Node Types matching Delta-AL
+enum Tag : byte { 
+    Wire = 0, 
+    Fan = 1,       // Lambda / Abs
+    App = 2,       // Application
+    Replicator = 3,// Dup / Sharing
+    Eraser = 4,    // Drop
+    Cons = 5,      // Scott Data / Constructor
+    Match = 6      // Scott Destructor
+}
+
+// 2. Explicit Link structure for serialization
+// (We pack this into u64 on the GPU side)
+struct Link {
+    tag: Tag;
+    port: ushort;
+    addr: uint;
+}
+
+// 3. The Node
+table Node {
+    main: Link;
+    aux1: Link;
+    aux2: Link;
+    data: uint; // Metadata (Replicator Level or Scott Tag)
+}
+
+table Graph {
+    nodes: [Node];
+    root: uint;
+}
+
+root_type Graph;

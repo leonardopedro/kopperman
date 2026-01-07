@@ -1,0 +1,11 @@
+[package]
+name = "runtime"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cubecl = { version = "0.1.0", features = ["wgpu"] } # Or git source
+flatbuffers = "23.5"
+petgraph = "0.6"
+tokio = { version = "1", features = ["full"] }
+bytemuck = "1.14"
