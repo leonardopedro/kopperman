@@ -11,6 +11,10 @@
     pkgs.curl
     pkgs.gnumake
      pkgs.git-lfs
+     pkgs.cabal-install # Haskell Cabal build tool
+    pkgs.ghc # GHC (Glasgow Haskell Compiler)
+    pkgs.flatbuffers # FlatBuffers compiler (flatc)
+ 
     #pkgs.pkgs
     # pkgs.python311
     # pkgs.python311Packages.pip
