@@ -1,15 +1,30 @@
 mod kernel;
 mod loader;
 mod verifier;
+mod collab;
 #[path = "../protocol_generated.rs"] mod protocol_generated;
 
 use cubecl::prelude::*;
+use loro::LoroDoc;
 
 #[tokio::main]
 async fn main() {
-    // 1. Load Data
-    let bin = std::fs::read("../runtime/proof.bin").unwrap();
-    let initial_heap = loader::load_flatbuffer(&bin);
+    // 1. Load Collaborative State or Binary
+    let initial_heap = if std::path::Path::new("proof.loro").exists() {
+        println!("Loading from proof.loro...");
+        let bytes = std::fs::read("proof.loro").unwrap();
+        let doc = LoroDoc::decode(&bytes).unwrap();
+        let proof_json = collab::export_proof(&doc);
+        
+        // In a real scenario, you'd send this JSON back through Dhall 
+        // to get the final optimized FlatBuffer. 
+        // For now, we assume we have the compiled proof.bin.
+        let bin = std::fs::read("../runtime/proof.bin").expect("proof.bin not found. Run compiler first.");
+        loader::load_flatbuffer(&bin)
+    } else {
+        let bin = std::fs::read("../runtime/proof.bin").expect("proof.bin not found. Run compiler first.");
+        loader::load_flatbuffer(&bin)
+    };
 
     // 2. Setup GPU
     let client = CubeClient::new(CubeClientOptions::default());

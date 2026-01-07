@@ -9,3 +9,6 @@ flatbuffers = "23.5"
 petgraph = "0.6"
 tokio = { version = "1", features = ["full"] }
 bytemuck = "1.14"
+loro = "0.16"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }

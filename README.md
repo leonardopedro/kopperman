@@ -2,6 +2,8 @@ Here is the complete, end-to-end tutorial for building the **Kopperman-Delta-GPU
 
 This implementation integrates all the advanced requirements: **Dhall** for logic, **Haskell/Egison** for algebraic optimization, **FlatBuffers** for serialization, **Rust/Petgraph** for verification, and a **CubeCL** GPU kernel featuring **HVM pointer tagging** and **Warp-Level Primitives** (Subgroup Operations) to minimize atomic contention.
 
+Additionally, it now supports **Collaborative Proof Editing** via **Loro CRDTs**, mapping the Dhall AST directly to Loro's recursive container format.
+
 ---
 
 # Project Architecture
@@ -25,7 +27,8 @@ kopperman_prover/
         ├── main.rs
         ├── kernel.rs       # CubeCL GPU Logic
         ├── loader.rs       # FlatBuffer -> HVM Mem
-        └── verifier.rs     # Petgraph Logic
+        ├── verifier.rs     # Petgraph Logic
+        └── collab.rs       # Loro CRDT Integration (New)
 ```
 
 ---
@@ -73,7 +76,19 @@ This is the most complex part. It implements HVM memory layout and Warp-Level pr
 
 **File:** [`runtime/src/loader.rs`](kopperman_prover/runtime/src/loader.rs)
 
+**File:** [`runtime/src/collab.rs`](kopperman_prover/runtime/src/collab.rs) (New: Collaborative AST Management)
+
 **File:** [`runtime/src/main.rs`](kopperman_prover/runtime/src/main.rs)
+
+---
+
+# Phase 5: Collaborative Workflow (Loro CRDT)
+
+Kopperman's proofs are now collaborative. Instead of editing text files, users can edit a **Loro Document** that represents the AST structure.
+
+1.  **AST Isomorphism:** Map Dhall Records/Unions to Loro Maps/Lists.
+2.  **Conflict Resolution:** Loro handles concurrent edits to the proof tree, ensuring a valid structure is always preserved.
+3.  **Dhall as the Linker:** The collaborative state stores "User Intent", which is then expanded by Dhall using the standard library (`hilbert.dhall`) into the low-level AST for the GPU.
 
 ---
 
@@ -99,4 +114,4 @@ This is the most complex part. It implements HVM memory layout and Warp-Level pr
     ```
 
 ### Why this is the "Final" Version
-This tutorial combines the Logic of **Kopperman**, the expressiveness of **Dhall**, the symbolic power of **Egison**, the serialization speed of **FlatBuffers**, and the raw throughput of **HVM-style GPU execution** with **Warp-level optimization**. It effectively turns your GPU into a massively parallel machine for verifying infinite dimensional Hilbert spaces.
+This tutorial combines the Logic of **Kopperman**, the expressiveness of **Dhall**, the symbolic power of **Egison**, the serialization speed of **FlatBuffers**, the raw throughput of **HVM-style GPU execution**, and the collaborative power of **Loro CRDTs**. It effectively turns your GPU into a massively parallel machine for verifying infinite dimensional Hilbert spaces while allowing multiple researchers to work on the same proof simultaneously.
