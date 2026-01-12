@@ -1,3 +1,5 @@
+ALL IN THIS REPOSITORY IS WORK IN PROGRESS, MOSTLY AI GENERATED, PROBABLY NOTHING WORKS
+
 Here is the complete, end-to-end tutorial for building the **Kopperman-Delta-GPU Theorem Prover**.
 
 This implementation integrates all the advanced requirements: **Dhall** for logic, **Haskell/Egison** for algebraic optimization, **FlatBuffers** for serialization, **Rust/Petgraph** for verification, and a **CubeCL** GPU kernel featuring **HVM pointer tagging** and **Warp-Level Primitives** (Subgroup Operations) to minimize atomic contention.
